@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 import {
   Dialog,
@@ -17,6 +19,7 @@ import { useCreateWorkspace } from "../api/use-create-workspace";
 
 export const CreateWorkspaceModal = () => {
   const [name, setName] = useState("");
+  const router = useRouter();
 
   const { mutate, isPending } = useCreateWorkspace();
 
@@ -32,8 +35,10 @@ export const CreateWorkspaceModal = () => {
     mutate(
       { name },
       {
-        onSuccess: (data) => {
-          console.log("Workspace created", data);
+        onSuccess: (id) => {
+          toast.success("Workspace created");
+          router.push(`/workspaces/${id}`);
+          handleClose();
         },
         onError: (error) => {
           console.error(error);
