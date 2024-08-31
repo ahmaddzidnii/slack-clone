@@ -2,7 +2,7 @@ import { useCallback, useMemo, useState } from "react";
 import { useMutation } from "convex/react";
 
 import { api } from "../../../../convex/_generated/api";
-import { Id } from "../../../../convex/_generated/dataModel";
+import { Doc, Id } from "../../../../convex/_generated/dataModel";
 
 type Options = {
   onSuccess?: (data: ResponseType) => void;
@@ -12,7 +12,7 @@ type Options = {
 };
 
 type RequestType = { name: string };
-type ResponseType = Id<"workspaces"> | null;
+type ResponseType = Doc<"workspaces"> | null;
 
 export const useCreateWorkspace = () => {
   const [data, setData] = useState<ResponseType>(null);
