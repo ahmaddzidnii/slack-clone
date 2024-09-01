@@ -7,11 +7,12 @@ import { SidebarButton } from "./sidebar-button";
 export const Sidebar = () => {
   return (
     <aside className="w-[70px] h-full bg-[#481349] flex flex-col items-center gap-y-4 pt-[9px] pb-4">
-      <div>
+      <div className="space-y-2">
         <WorkspaceSwitcher />
         <SidebarButton
           icon={Home}
           label="Home"
+          isActive
         />
         <SidebarButton
           icon={MessagesSquare}
