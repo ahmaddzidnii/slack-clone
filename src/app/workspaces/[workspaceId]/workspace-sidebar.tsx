@@ -4,16 +4,19 @@ import { useGetMembers } from "@/features/members/api/use-get-members";
 import { useGetChannels } from "@/features/channels/api/use-get-channels";
 import { useCurrentMember } from "@/features/members/api/use-current-members";
 import { useGetWorkspace } from "@/features/workspaces/api/use-get-workspace";
+import { useCreateChannelsModal } from "@/features/channels/store/use-create-channels-modal";
 
 import { useWorkspaceId } from "@/hooks/use-workspace-id";
 
 import { WorkspaceHeader } from "./workspace-header";
 import { SidebarItem } from "./sidebar-item";
-import { channel } from "diagnostics_channel";
 import { WorkspaceSection } from "./workspace-section";
+import { UserItems } from "./user-items";
 
 export const WorkspaceSidebar = () => {
   const workspaceId = useWorkspaceId();
+  const [_open, setOpen] = useCreateChannelsModal();
+
   const { data: member, isLoading: memberIsLoading } = useCurrentMember({ workspaceId });
   const { data: workspace, isLoading: workspaceIsLoading } = useGetWorkspace({ id: workspaceId });
   const { data: channels, isLoading: channelsIsLoading } = useGetChannels({ workspaceId });
@@ -57,7 +60,7 @@ export const WorkspaceSidebar = () => {
       <WorkspaceSection
         label="Channels"
         hint="New channel"
-        onNew={() => console.log("new channel")}
+        onNew={member.role === "admin" ? () => setOpen(true) : undefined}
       >
         {channels?.map((c) => (
           <SidebarItem
@@ -68,7 +71,20 @@ export const WorkspaceSidebar = () => {
           />
         ))}
       </WorkspaceSection>
-      {members?.map((m) => <div key={m._id}>{m.user?.name}</div>)}
+      <WorkspaceSection
+        label="Direct Messages"
+        hint="Direct message"
+        onNew={() => console.log("new channel")}
+      >
+        {members?.map((m) => (
+          <UserItems
+            key={m._id}
+            id={m._id}
+            label={m.user.name}
+            image={m.user.image}
+          />
+        ))}
+      </WorkspaceSection>
     </div>
   );
 };
